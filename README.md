@@ -251,10 +251,15 @@ resource "aws_lb_target_group_attachment" "app_b" {
    - Go to the **EC2 Dashboard** and **VPC Dashboard** in the AWS Management Console.
    - Verify that the VPC, subnets, Internet Gateway, Route Table, security group, EC2 instances, and load balancer have been created.
 
+![image](https://github.com/user-attachments/assets/fb45e898-75b5-4dac-8bfe-df173dd7f9f8)
+
+
 2. **Test Load Balancer**:
    - Navigate to the **Load Balancer** section in the AWS Management Console.
    - Find your load balancer and copy its **DNS name**.
    - Paste the DNS name into your web browser to verify that traffic is being distributed between your EC2 instances.
+
+![image](https://github.com/user-attachments/assets/acc09330-0766-47a2-b713-a9cfadac821f)
 
 ---
 
