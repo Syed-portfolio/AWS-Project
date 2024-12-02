@@ -1,0 +1,60 @@
+name: Terraform Create VPC
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Step 1: Checkout the repository
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    # Step 2: Set up Terraform
+    - name: Set up Terraform
+      uses: hashicorp/setup-terraform@v1
+      with:
+        terraform_version: '1.5.0'  # Set your preferred version
+
+    # Step 3: Cache Terraform providers
+    - name: Cache Terraform providers
+      uses: actions/cache@v2
+      with:
+        path: ~/.terraform.d/plugin-cache
+        key: ${{ runner.os }}-terraform-${{ hashFiles('**/*.tf') }}
+        restore-keys: |
+          ${{ runner.os }}-terraform-
+
+    # Step 4: Set up AWS credentials
+    - name: Set up AWS credentials
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_REGION: us-west-2  # Change to your desired AWS region
+      run: |
+        echo "AWS Access Key and Secret Key are set"
+
+    # Step 5: Initialize Terraform
+    - name: Terraform Init
+      run: terraform init
+
+    # Step 6: Plan the Terraform deployment
+    - name: Terraform Plan
+      run: terraform plan -out=tfplan
+
+    # Step 7: Apply the Terraform plan to create the VPC
+    - name: Terraform Apply
+      run: terraform apply -auto-approve tfplan
+
+    # Step 8: Output created resources
+    - name: Show Terraform output
+      run: terraform output
+
+   
